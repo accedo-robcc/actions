@@ -45,7 +45,6 @@ jobs:
       - name: Increase version
         run: |
           npm version ${{ inputs.scriptType }} --preid=${{ inputs.preid }}
-          git push --follow-tags
 
       - name: Retrieve version
         id: version
@@ -55,3 +54,11 @@ jobs:
       - name: Print version
         run: |
           echo ${{ steps.version.outputs.TAG_NAME }}
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          commit-message: "chore: release"
+          title: "Release: ${{ steps.version.outputs.TAG_NAME }}"
+          body: New release
+          branch: chore/release

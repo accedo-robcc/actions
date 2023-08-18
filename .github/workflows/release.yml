@@ -50,7 +50,7 @@ jobs:
       - name: Retrieve version
         id: version
         run: |
-          echo "TAG_NAME=git describe --tags $(git rev-list --tags --max-count=1)" >> $GITHUB_OUTPUT
+          echo "TAG_NAME=$(git describe --tags $(git rev-list --tags --max-count=1))" >> $GITHUB_OUTPUT
 
       - name: Print version
         run: |

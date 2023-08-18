@@ -25,12 +25,12 @@ on:
         type: string
         required: false
         default: 'rc'
+permissions:
+  contents: write
 
 jobs:
   log-sample:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
       - name: Node setup
         uses: actions/setup-node@v3
@@ -41,11 +41,11 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: ${{ inputs.branch }}
-          ssh-key: ${{ secrets.SSH_PRIVATE_KEY_ROBCC }}
 
       - name: Increase version
         run: |
           npm version ${{ inputs.scriptType }} --preid=${{ inputs.preid }}
+          git push --follow-tags
 
       - name: Retrieve version
         id: version

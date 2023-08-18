@@ -1,0 +1,36 @@
+name: Release
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch name where tag will be created'
+        required: true
+        default: 'develop'
+        type: string
+      scriptType:
+        description: 'Version script'
+        required: true
+        default: 'status'
+        type: choice
+        options:
+          - 'status'
+          # - 'npm version patch'
+          # - 'npm version minor'
+
+jobs:
+  log-sample:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Node setup
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.10'
+
+      - name: Code checkout
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.branch }}
+
+      - name: Test script
+        run: |
+          git ${{ inputs.scriptType }}

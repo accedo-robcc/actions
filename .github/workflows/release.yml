@@ -29,6 +29,8 @@ on:
 jobs:
   log-sample:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Node setup
         uses: actions/setup-node@v3

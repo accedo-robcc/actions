@@ -60,4 +60,5 @@ jobs:
         run: |
             git checkout master
             git merge develop
+            git push
 

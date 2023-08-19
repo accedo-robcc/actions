@@ -58,9 +58,8 @@ jobs:
 
       - name: Apply changes to master
         run: |
-            git branch --show-current
             git fetch origin master --depth 1
-            git branch --show-current
-            git merge origin/develop
+            git checkout master
+            git merge develop
             git push
 

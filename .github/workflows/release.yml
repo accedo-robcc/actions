@@ -63,3 +63,7 @@ jobs:
           body: New release
           branch: chore/release-${{ steps.version.outputs.TAG_NAME }}
           base: master
+
+      - name: Push tag
+        run: |
+          git push origin ${{ steps.version.outputs.TAG_NAME }}

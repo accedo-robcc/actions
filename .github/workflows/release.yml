@@ -4,18 +4,27 @@ on:
     inputs:
       branch:
         description: 'Branch name where tag will be created'
+        type: string
         required: true
         default: 'develop'
-        type: string
       scriptType:
         description: 'Version script'
-        required: true
-        default: 'status'
         type: choice
+        required: true
+        default: 'prerelease'
         options:
-          - 'status'
-          # - 'npm version patch'
-          # - 'npm version minor'
+          - 'prerelease'
+          - 'patch'
+          - 'prepatch'
+          - 'minor'
+          - 'preminor'
+          - 'major'
+          - 'premajor'
+      preid:
+        description: 'prerelease identifiers'
+        type: string
+        required: false
+        default: 'rc'
 
 jobs:
   log-sample:
@@ -31,6 +40,26 @@ jobs:
         with:
           ref: ${{ inputs.branch }}
 
-      - name: Test script
+      - name: Increase version
         run: |
-          git ${{ inputs.scriptType }}
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          npm version ${{ inputs.scriptType }} --preid=${{ inputs.preid }}
+
+      - name: Retrieve version
+        id: version
+        run: |
+          echo "TAG_NAME=$(git describe --tags $(git rev-list --tags --max-count=1))" >> $GITHUB_OUTPUT
+
+      - name: Print version
+        run: |
+          echo ${{ steps.version.outputs.TAG_NAME }}
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          commit-message: "chore: release"
+          title: "Release: ${{ steps.version.outputs.TAG_NAME }}"
+          body: New release
+          branch: chore/release-${{ steps.version.outputs.TAG_NAME }}
+          base: master

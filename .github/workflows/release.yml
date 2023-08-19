@@ -62,7 +62,6 @@ jobs:
           title: "Release: ${{ steps.version.outputs.TAG_NAME }}"
           body: New release
           branch: chore/release-${{ steps.version.outputs.TAG_NAME }}
-          base: master
 
       - name: Push tag
         run: |

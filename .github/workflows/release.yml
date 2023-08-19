@@ -45,7 +45,6 @@ jobs:
           git config user.name github-actions
           git config user.email github-actions@github.com
           npm version ${{ inputs.scriptType }} --preid=${{ inputs.preid }}
-          git push --follow-tags
 
       - name: Retrieve version
         id: version

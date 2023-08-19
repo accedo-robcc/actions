@@ -56,8 +56,15 @@ jobs:
           git push
           git push origin ${{ steps.version.outputs.TAG_NAME }}
 
+
+      - name: Switching to master
+        uses: actions/checkout@v3
+        with:
+          ref: master
+
       - name: Apply changes to master
         run: |
+            git fetch origin master --depth 1
             git checkout master
             git merge develop
             git push

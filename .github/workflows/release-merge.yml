@@ -1,0 +1,63 @@
+name: Release with PR
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch name where tag will be created'
+        type: string
+        required: true
+        default: 'develop'
+      scriptType:
+        description: 'Version script'
+        type: choice
+        required: true
+        default: 'prerelease'
+        options:
+          - 'prerelease'
+          - 'patch'
+          - 'prepatch'
+          - 'minor'
+          - 'preminor'
+          - 'major'
+          - 'premajor'
+      preid:
+        description: 'prerelease identifiers'
+        type: string
+        required: false
+        default: 'rc'
+
+jobs:
+  log-sample:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Node setup
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.10'
+
+      - name: Code checkout
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.branch }}
+
+      - name: Increase version
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          npm version ${{ inputs.scriptType }} --preid=${{ inputs.preid }}
+
+      - name: Retrieve version
+        id: version
+        run: |
+          echo "TAG_NAME=$(git describe --tags $(git rev-list --tags --max-count=1))" >> $GITHUB_OUTPUT
+
+      - name: Push
+        run: |
+          git push
+          git push origin ${{ steps.version.outputs.TAG_NAME }}
+
+      - name: Apply changes to master
+        run: |
+            git checkout master
+            git merge develop
+

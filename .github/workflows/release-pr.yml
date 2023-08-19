@@ -1,4 +1,4 @@
-name: Release
+name: Release with PR
 on:
   workflow_dispatch:
     inputs:
@@ -51,18 +51,19 @@ jobs:
         run: |
           echo "TAG_NAME=$(git describe --tags $(git rev-list --tags --max-count=1))" >> $GITHUB_OUTPUT
 
-      - name: Print version
-        run: |
-          echo ${{ steps.version.outputs.TAG_NAME }}
 
       - name: Create Pull Request
+        id: pr
         uses: peter-evans/create-pull-request@v5
         with:
-          commit-message: "chore: release"
-          title: "Release: ${{ steps.version.outputs.TAG_NAME }}"
-          body: New release
-          branch: chore/release-${{ steps.version.outputs.TAG_NAME }}
+          title: "release: ${{ steps.version.outputs.TAG_NAME }} 🎉"
+          body: Automated release
+          branch: release/${{ steps.version.outputs.TAG_NAME }}
 
       - name: Push tag
         run: |
           git push origin ${{ steps.version.outputs.TAG_NAME }}
+
+      - name: Outputs
+        run: |
+          echo "Pull request created: ${{ steps.pr.outputs.pull-request-url }}"

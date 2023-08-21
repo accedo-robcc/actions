@@ -46,7 +46,7 @@ jobs:
       - name: Code checkout
         uses: actions/checkout@v3
         with:
-          token: ${{ secrets.RELEASE_KEY }}
+          ssh-key: ${{ secrets.RELEASE_KEY }}
           ref: ${{ inputs.branch }}
           fetch-depth: 0
 

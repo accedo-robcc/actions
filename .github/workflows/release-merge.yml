@@ -1,17 +1,21 @@
 name: Release with merge
+
+env:
+  NODE_VERSION: 16.10
+
 on:
   workflow_dispatch:
     inputs:
       branch:
-        description: 'Branch name where tag will be created'
+        description: Select the branch
         type: string
         required: true
-        default: 'develop'
+        default: develop
       scriptType:
-        description: 'Version script'
+        description: Select the version script
         type: choice
         required: true
-        default: 'prerelease'
+        default: prerelease
         options:
           - 'prerelease'
           - 'patch'
@@ -21,10 +25,14 @@ on:
           - 'major'
           - 'premajor'
       preid:
-        description: 'prerelease identifiers'
+        description: Select the pre-release identifier (leave otherwise)
         type: string
         required: false
         default: 'rc'
+      secondBranch:
+        description: Apply on a second branch?
+        type: string
+        required: false
 
 jobs:
   log-sample:
@@ -33,12 +41,13 @@ jobs:
       - name: Node setup
         uses: actions/setup-node@v3
         with:
-          node-version: '16.10'
+          node-version: ${{ env.NODE_VERSION }}
 
       - name: Code checkout
         uses: actions/checkout@v3
         with:
           ref: ${{ inputs.branch }}
+          fetch-depth: 0
 
       - name: Increase version
         run: |
@@ -51,15 +60,18 @@ jobs:
         run: |
           echo "TAG_NAME=$(git describe --tags $(git rev-list --tags --max-count=1))" >> $GITHUB_OUTPUT
 
-      - name: Push
+      - name: Push new version
         run: |
           git push
           git push origin ${{ steps.version.outputs.TAG_NAME }}
 
-      - name: Apply changes to master
+      - name: Apply changes to second branch
+        if: inputs.secondBranch != ''
         run: |
-            git fetch origin master --depth 1
-            git checkout master
+            git fetch origin ${{ inputs.secondBranch }}
+            git branch --show-current
+            git checkout ${{ inputs.secondBranch }}
+            git branch --show-current
             git merge develop
             git push
 

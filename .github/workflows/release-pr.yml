@@ -74,3 +74,13 @@ jobs:
         run: |
           git branch --show-current
           echo "Pull request created: ${{ steps.pr.outputs.pull-request-url }}"
+
+      - name: Code checkout
+        uses: actions/checkout@v3
+        with:
+          ref: release/${{ steps.version.outputs.TAG_NAME }}
+
+      - name: Outputs 2
+        run: |
+          git branch --show-current
+

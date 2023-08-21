@@ -80,13 +80,12 @@ jobs:
 
       - name: Outputs
         run: |
-          git branch --show-current
           echo "Pull request created: ${{ steps.pr.outputs.pull-request-url }}"
 
   second-pr:
     if: inputs.secondBranch != ''
-    runs-on: ubuntu-latest
     needs: release-pr
+    runs-on: ubuntu-latest
     steps:
       - name: Node setup
         uses: actions/setup-node@v3
@@ -98,11 +97,6 @@ jobs:
         with:
           ref: ${{ needs.release-pr.outputs.releaseBranch }}
 
-      - name: Outputs 2
-        run: |
-          git branch --show-current
-          echo ${{ needs.release-pr.outputs.releaseBranch }}
-
       - name: create pull request
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -112,3 +106,4 @@ jobs:
           --title '${{ needs.release-pr.outputs.tagName }} -> ${{ inputs.secondBranch }} 🎉'
           --body 'Automated release'
           --label release
+          --label 'automated pr'

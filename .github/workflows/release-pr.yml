@@ -105,4 +105,5 @@ jobs:
           --base ${{ inputs.secondBranch }}
           --title '${{ needs.release-pr.outputs.tagName }} -> ${{ inputs.secondBranch }} 🎉'
           --body 'Automated release'
-          --label release 'automated pr'
+          --label release
+          --label 'automated pr'

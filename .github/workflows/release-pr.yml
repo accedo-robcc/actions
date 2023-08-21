@@ -1,4 +1,5 @@
 name: Release with pr
+
 on:
   workflow_dispatch:
     inputs:
@@ -8,23 +9,23 @@ on:
         required: true
         default: develop
       scriptType:
-        description: Select the version script
+        description: Select the version script. To simulate, visit https://npm.runkit.com/semver.
         type: choice
         required: true
         default: prerelease
         options:
-          - 'prerelease'
-          - 'patch'
-          - 'prepatch'
-          - 'minor'
-          - 'preminor'
-          - 'major'
-          - 'premajor'
+          - prerelease
+          - patch
+          - prepatch
+          - minor
+          - preminor
+          - major
+          - premajor
       preid:
         description: Select the pre-release identifier (leave otherwise)
         type: string
         required: false
-        default: 'rc'
+        default: rc
       secondBranch:
         description: Apply on a second branch?
         type: string

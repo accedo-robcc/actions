@@ -12,7 +12,7 @@ on:
         required: true
         default: develop
       scriptType:
-        description: Select the version script. See [semver](https://npm.runkit.com/semver)
+        description: Select the version script. To simulate, visit https://npm.runkit.com/semver.
         type: choice
         required: true
         default: prerelease

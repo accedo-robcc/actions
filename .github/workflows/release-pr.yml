@@ -25,9 +25,13 @@ on:
         type: string
         required: false
         default: 'rc'
+      secondPR:
+        description: Create second PR?
+        type: string
+        required: false
 
 jobs:
-  log-sample:
+  release-pr:
     runs-on: ubuntu-latest
     steps:
       - name: Node setup
@@ -51,7 +55,6 @@ jobs:
         run: |
           echo "TAG_NAME=$(git describe --tags $(git rev-list --tags --max-count=1))" >> $GITHUB_OUTPUT
 
-
       - name: Create Pull Request
         id: pr
         uses: peter-evans/create-pull-request@v5
@@ -59,6 +62,9 @@ jobs:
           title: "release: ${{ steps.version.outputs.TAG_NAME }} 🎉"
           body: Automated release
           branch: release/${{ steps.version.outputs.TAG_NAME }}
+          labels: |
+            automated pr
+            release
 
       - name: Push tag
         run: |
@@ -66,4 +72,5 @@ jobs:
 
       - name: Outputs
         run: |
+          git branch --show-current
           echo "Pull request created: ${{ steps.pr.outputs.pull-request-url }}"

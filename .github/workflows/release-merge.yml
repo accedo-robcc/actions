@@ -46,13 +46,12 @@ jobs:
       - name: Code checkout
         uses: actions/checkout@v3
         with:
+          token: ${{ secrets.RELEASE_KEY }}
           ref: ${{ inputs.branch }}
           fetch-depth: 0
 
       - name: Increase version
         run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
           npm version ${{ inputs.scriptType }} --preid=${{ inputs.preid }}
 
       - name: Retrieve version

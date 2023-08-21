@@ -1,4 +1,7 @@
-name: gh-release
+name: Github releases
+
+permissions:
+  contents: write
 
 on:
   push:

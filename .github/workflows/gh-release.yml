@@ -4,7 +4,6 @@ permissions:
   contents: write
 
 on:
-  workflow_dispatch:
   push:
     tags:
       - "**"
@@ -15,6 +14,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          ssh-key: "${{ secrets.COMMIT_KEY }}"
 
       - name: Release
         uses: softprops/action-gh-release@v1

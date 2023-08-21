@@ -65,9 +65,6 @@ jobs:
           git push
           git push origin ${{ steps.version.outputs.TAG_NAME }}
 
-      - name: Release
-        uses: softprops/action-gh-release@v1
-
       - name: Merge to ${{ inputs.secondBranch }}
         if: inputs.secondBranch != ''
         run: |

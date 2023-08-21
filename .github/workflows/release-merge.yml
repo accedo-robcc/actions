@@ -1,4 +1,8 @@
 name: Release with merge
+
+env:
+  NODE_VERSION: 16.10
+
 on:
   workflow_dispatch:
     inputs:
@@ -25,6 +29,10 @@ on:
         type: string
         required: false
         default: 'rc'
+      secondBranch:
+        description: Create second PR?
+        type: string
+        required: false
 
 jobs:
   log-sample:
@@ -33,12 +41,13 @@ jobs:
       - name: Node setup
         uses: actions/setup-node@v3
         with:
-          node-version: '16.10'
+          node-version: ${{ env.NODE_VERSION }}
 
       - name: Code checkout
         uses: actions/checkout@v3
         with:
           ref: ${{ inputs.branch }}
+          fetch-depth: 0
 
       - name: Increase version
         run: |
@@ -56,10 +65,13 @@ jobs:
           git push
           git push origin ${{ steps.version.outputs.TAG_NAME }}
 
-      - name: Apply changes to master
+      - name: Merge to ${{ inputs.secondBranch }}
+        if: inputs.secondBranch != ''
         run: |
-            git fetch origin master --depth 1
-            git checkout master
-            git merge develop
+            git fetch origin ${{ inputs.secondBranch }}
+            git branch --show-current
+            git checkout ${{ inputs.secondBranch }}
+            git branch --show-current
+            git merge ${{ inputs.branch }}
             git push
 

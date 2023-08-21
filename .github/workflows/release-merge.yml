@@ -7,15 +7,15 @@ on:
   workflow_dispatch:
     inputs:
       branch:
-        description: Select the branch
+        description: 'Branch name where tag will be created'
         type: string
         required: true
-        default: develop
+        default: 'develop'
       scriptType:
-        description: Select the version script
+        description: 'Version script'
         type: choice
         required: true
-        default: prerelease
+        default: 'prerelease'
         options:
           - 'prerelease'
           - 'patch'
@@ -25,12 +25,12 @@ on:
           - 'major'
           - 'premajor'
       preid:
-        description: Select the pre-release identifier (leave otherwise)
+        description: 'prerelease identifiers'
         type: string
         required: false
         default: 'rc'
       secondBranch:
-        description: Apply on a second branch?
+        description: Create second PR?
         type: string
         required: false
 
@@ -60,18 +60,18 @@ jobs:
         run: |
           echo "TAG_NAME=$(git describe --tags $(git rev-list --tags --max-count=1))" >> $GITHUB_OUTPUT
 
-      - name: Push new version
+      - name: Push
         run: |
           git push
           git push origin ${{ steps.version.outputs.TAG_NAME }}
 
-      - name: Apply changes to second branch
+      - name: Merge to ${{ inputs.secondBranch }}
         if: inputs.secondBranch != ''
         run: |
             git fetch origin ${{ inputs.secondBranch }}
             git branch --show-current
             git checkout ${{ inputs.secondBranch }}
             git branch --show-current
-            git merge develop
+            git merge ${{ inputs.branch }}
             git push
 

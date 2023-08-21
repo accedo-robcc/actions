@@ -3,10 +3,7 @@ name: Github releases
 permissions:
   contents: write
 
-on:
-  push:
-    tags:
-      - "v*.*.*"
+on: push
 
 jobs:
   build:
@@ -17,3 +14,4 @@ jobs:
 
       - name: Release
         uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')

@@ -3,15 +3,15 @@ on:
   workflow_dispatch:
     inputs:
       branch:
-        description: 'Branch name where tag will be created'
+        description: Select the branch
         type: string
         required: true
-        default: 'develop'
+        default: develop
       scriptType:
-        description: 'Version script'
+        description: Select the version script
         type: choice
         required: true
-        default: 'prerelease'
+        default: prerelease
         options:
           - 'prerelease'
           - 'patch'
@@ -21,12 +21,12 @@ on:
           - 'major'
           - 'premajor'
       preid:
-        description: 'prerelease identifiers'
+        description: Select the pre-release identifier (leave otherwise)
         type: string
         required: false
         default: 'rc'
       secondBranch:
-        description: Create second PR?
+        description: Apply on a second branch?
         type: string
         required: false
 
@@ -97,7 +97,7 @@ jobs:
         with:
           ref: ${{ needs.release-pr.outputs.releaseBranch }}
 
-      - name: create pull request
+      - name: Create second pull request
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: >

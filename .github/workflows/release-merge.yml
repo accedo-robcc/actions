@@ -1,4 +1,4 @@
-name: Release with merge
+name: Release & merge
 
 env:
   NODE_VERSION: 16.10
@@ -65,7 +65,7 @@ jobs:
           git push
           git push origin ${{ steps.version.outputs.TAG_NAME }}
 
-      - name: Merge to ${{ inputs.secondBranch }}
+      - name: Merge to second branch - ${{ inputs.secondBranch }}
         if: inputs.secondBranch != ''
         run: |
             git fetch origin ${{ inputs.secondBranch }}

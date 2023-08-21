@@ -7,35 +7,35 @@ on:
   workflow_dispatch:
     inputs:
       branch:
-        description: 'Branch name where tag will be created'
+        description: Select the branch
         type: string
         required: true
-        default: 'develop'
+        default: develop
       scriptType:
-        description: 'Version script'
+        description: Select the version script. See [semver](https://npm.runkit.com/semver)
         type: choice
         required: true
-        default: 'prerelease'
+        default: prerelease
         options:
-          - 'prerelease'
-          - 'patch'
-          - 'prepatch'
-          - 'minor'
-          - 'preminor'
-          - 'major'
-          - 'premajor'
+          - prerelease
+          - patch
+          - prepatch
+          - minor
+          - preminor
+          - major
+          - premajor
       preid:
-        description: 'prerelease identifiers'
+        description: Select the pre-release identifier (leave otherwise)
         type: string
         required: false
-        default: 'rc'
+        default: rc
       secondBranch:
-        description: Create second PR?
+        description: Apply on a second branch?
         type: string
         required: false
 
 jobs:
-  log-sample:
+  release-merge:
     runs-on: ubuntu-latest
     steps:
       - name: Node setup
@@ -69,9 +69,6 @@ jobs:
         if: inputs.secondBranch != ''
         run: |
             git fetch origin ${{ inputs.secondBranch }}
-            git branch --show-current
             git checkout ${{ inputs.secondBranch }}
-            git branch --show-current
             git merge ${{ inputs.branch }}
             git push
-

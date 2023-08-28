@@ -1,13 +1,10 @@
 name: Webhook
 
-permissions:
-  contents: write
-
 on:
   workflow_dispatch:
 
 jobs:
-  build:
+  invoke:
     runs-on: ubuntu-latest
     steps:
       - name: Invoke webhook

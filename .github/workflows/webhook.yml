@@ -1,0 +1,17 @@
+name: Webhook
+
+permissions:
+  contents: write
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Invoke webhook
+        uses: distributhor/workflow-webhook@v3
+        with:
+          webhook_url: ${{ secrets.TEST_CBC_GEM_GENERIC_WEBHOOK }}
+          webhook_secret: ""

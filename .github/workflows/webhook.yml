@@ -12,6 +12,6 @@ jobs:
     steps:
       - name: Invoke webhook
         uses: distributhor/workflow-webhook@v3
-        with:
+        env:
           webhook_url: ${{ secrets.TEST_CBC_GEM_GENERIC_WEBHOOK }}
           webhook_secret: ""

@@ -1,3 +1,5 @@
+name: Read triggers
+
 on:
   push:
     branches: [master]

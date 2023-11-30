@@ -28,3 +28,13 @@ jobs:
       - name: github.event_name
         run: |
           echo "${{ github.event_name }}"
+
+      - name: echo file
+        run: |
+          echo "${{ github }}" > gh
+
+      - name: Upload Tizen package artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: gh
+          path: ./gh

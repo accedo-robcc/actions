@@ -5,11 +5,22 @@ on:
   push:
     branches: [master, other]
 
+env:
+  isManual: ${{github.event_name == 'workflow_dispatch'}}
+  isPush: ${{github.event_name == 'push'}}
+  isAny: ${{github.event_name == 'workflow_dispatch' || github.event_name == 'push'}}
+
 jobs:
   triggers:
     name: Print info
     runs-on: ubuntu-latest
     steps:
+      - name: Echo envs
+        run: |
+          echo "${{ env.isManual }}"
+          echo "${{ env.isPush }}"
+          echo "${{ env.isAny }}"
+
       - name: GitHub context
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}

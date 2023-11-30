@@ -1,6 +1,7 @@
 name: Print context
 
 on:
+  workflow_dispatch:
   push:
     branches: [master, other]
 

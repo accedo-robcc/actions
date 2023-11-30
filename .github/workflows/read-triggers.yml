@@ -2,7 +2,7 @@ name: Print context
 
 on:
   push:
-    branches: [master]
+    branches: [master, other]
 
 jobs:
   triggers:
